@@ -4,7 +4,11 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from app.core import deps
 
-api_router = APIRouter()
+from app.auth.api import router as auth_router
+
+api_router = APIRouter(prefix="/api/v1")
+
+api_router.include_router(auth_router, tags=["Authorization"])
 
 
 @api_router.get("/health")
