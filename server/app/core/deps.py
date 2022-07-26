@@ -8,3 +8,7 @@ from fastapi import Depends
 def get_db(engine: Engine = Depends(get_engine)) -> Generator:
     with get_session(engine=engine) as db:
         yield db
+
+
+def get_current_active_user_id() -> str:
+    return "ROOT"
