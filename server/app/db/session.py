@@ -12,7 +12,7 @@ def get_engine() -> Engine:
     settings = get_app_settings()
 
     def debug_mode() -> bool:
-        return settings.APP_ENVIRONMENT == "development"
+        return settings.APP_ENVIRONMENT == "debug"
 
     return create_engine(
         str(settings.SQLALCHEMY_DATABASE_URI),
