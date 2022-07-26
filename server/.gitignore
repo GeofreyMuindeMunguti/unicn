@@ -5,3 +5,4 @@ dev-scripts/
 ../app/
 ../web/
 .env.local
+.mypy_cache/
