@@ -40,6 +40,10 @@ class Settings(BaseSettings):
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
 
+    ACCESS_TOKEN_EXPIRY_IN_SECONDS: int = 60 * 60 * 24 * 7
+    REFRESH_TOKEN_EXPIRY_IN_SECONDS: int = 60 * 60 * 24 * 7
+    SECRET_KEY: str = "secret-key"
+
     SMTP_TLS: bool = True
     SMTP_PORT: Optional[int] = 1234
     SMTP_HOST: Optional[str] = "test"

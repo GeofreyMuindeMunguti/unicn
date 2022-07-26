@@ -21,6 +21,8 @@ fastapi-pagination = "^0.9.3"
 tabulate = "^0.8.10"
 ipython = "^8.4.0"
 isort = "^5.10.1"
+passlib = "^1.7.4"
+python-jose = "^3.3.0"
 
 [tool.poetry.dev-dependencies]
 
