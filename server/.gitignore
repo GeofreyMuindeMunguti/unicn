@@ -1,2 +1,7 @@
 .venv
 .idea
+dev-scripts/
+*__pycache__
+../app/
+../web/
+.env.local
