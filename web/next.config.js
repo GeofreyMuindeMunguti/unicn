@@ -7,6 +7,15 @@ const nextConfig = {
     reactRemoveProperties: true,
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/login',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
