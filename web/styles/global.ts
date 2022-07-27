@@ -6,8 +6,14 @@ import { createGlobalStyle } from 'styled-components';
 const GlobalStyles = createGlobalStyle`
     /* css variables */
     :root {
-     --primary-background-color: #f5f7fa;
+     --primary-color: #093ef9;
+     --primary-background-color: #ffffff;
      --text-color: #263238;
+     --text-color-light: #ffffff;
+     --error-color: #c72e2e;
+     --color-dark-gray: #d9d9d9;
+     --input-border: #e1e4e8;
+     --input-background-color: #f3f4f6;
 
      --font-primary: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
      --font-sub-headings: var(--font-primary);
@@ -69,9 +75,11 @@ const GlobalStyles = createGlobalStyle`
 
     a {
       cursor: pointer;
+      color: var(--primary-color);
       text-decoration: none;
       font-family: var(--font-links);
       font-weight: 500;
+      font-size: 1.4rem;
     }
 
     ul {
