@@ -51,6 +51,7 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: Optional[str] = None
     EMAILS_FROM_EMAIL: Optional[str] = "info@unicn.com"
     EMAILS_FROM_NAME: Optional[str] = None
+    EMAILS_ENABLED: bool = True
 
     # REDIS settings
     REDIS_HOST: Optional[str] = "localhost"
@@ -78,6 +79,10 @@ class Settings(BaseSettings):
     CELERY_MAX_RETRIES: int = 3
     CELERY_INTERVAL: float = 0.2
     CELERY_MAIN_QUEUE: str = "main-queue"
+
+    REGISTER_URL: str = "http://unicn.com/register"
+    API_V1_STR: str = "/api/v1"
+    JWT_ALGORITHM: str = "HS256"
 
     class Config:
         case_sensitive = True

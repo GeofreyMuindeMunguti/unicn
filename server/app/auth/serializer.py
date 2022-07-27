@@ -57,3 +57,21 @@ class LoginSerializer(BaseModel):
 
 class LoginResponseSerializer(TokenInDBInDBBaseSerializer):
     user: UserSerializer
+
+
+class PasswordResetResponseSerializer(UserSerializer):
+    pass
+
+
+class PasswordResetSerializer(BaseModel):
+    email: str
+    password: str
+    reset_code: str
+
+
+class GetPasswordResetCodeSerializer(BaseModel):
+    email: str
+
+
+class ResetCodeSerializer(BaseModel):
+    reset_code: str

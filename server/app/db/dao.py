@@ -285,6 +285,7 @@ class UpdateDao(Generic[ModelType, UpdateSerializer]):
             db.commit()
 
             updated_db_obj = self.get_not_none(db, id=db_obj.id)
+            self.on_post_update(db, db_obj=updated_db_obj, changed=changed_obj_state)
 
             return updated_db_obj
         except IntegrityError:

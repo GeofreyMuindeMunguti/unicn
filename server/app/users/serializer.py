@@ -11,8 +11,10 @@ class UserCreateSerializer(BaseModel):
     hashed_password: Optional[str]
 
 
-class UserUpdateSerializer(UserCreateSerializer):
-    pass
+class UserUpdateSerializer(BaseModel):
+    name: Optional[str]
+    email: Optional[str]
+    hashed_password: Optional[str]
 
 
 class UserSerializer(InDBBaseSerializer):
