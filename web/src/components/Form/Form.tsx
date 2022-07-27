@@ -16,7 +16,7 @@ const Container = styled.form.attrs({ autoComplete: 'off' })`
 `;
 
 const FormField = styled.div<FormFieldProps>`
-  margin: 1.5rem 0;
+  margin-bottom: 3rem;
   width: 100%;
 
   label {

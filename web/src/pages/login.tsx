@@ -17,14 +17,17 @@ const LoginPage: NextPage = () => {
           <label htmlFor="password">Password</label>
           <input type="password" placeholder="Enter your password" />
         </Form.Field>
-        <Link href="/forgot-password">
+        <Link href="/reset-password">
           <a>Forgot Password?</a>
         </Link>
         <Form.Button>
           <Button>Login</Button>
         </Form.Button>
         <Form.FooterCaption>
-          <span>Are you new here, please</span> <Link href="/login">contact</Link>{' '}
+          <span>Are you new here, please</span>{' '}
+          <Link href="/">
+            <a>contact</a>
+          </Link>{' '}
           for setup
         </Form.FooterCaption>
       </Form.Container>
