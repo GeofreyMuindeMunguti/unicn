@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from sqlalchemy.orm import Session, load_only, noload, selectinload
+from sqlalchemy.orm import Session, load_only, noload, selectinload, joinedload
 
 from app.auth.models import AuthToken
 from app.core.security import create_access_token
@@ -12,6 +12,8 @@ from app.auth.serializer import (
 
 from app.db.dao import CRUDDao
 from app.exceptions.custom import DaoException
+from app.partners.models import PartnerMember
+from app.users.models import User
 
 
 class TokenDao(
@@ -90,9 +92,16 @@ class TokenDao(
 
         token = self.get(db, user_id=user.id)
         if not token:
-            token = self.create(db, obj_in=TokenCreateSerializer(user_id=user.id, token_type=TokenGrantType.AUTHORIZATION_CODE))
+            self.create(db, obj_in=TokenCreateSerializer(user_id=user.id, token_type=TokenGrantType.AUTHORIZATION_CODE))
 
+        token = self.get(db, user_id=user.id, load_options=[
+            joinedload(AuthToken.user).options(
+                joinedload(User.memberships).options(joinedload(PartnerMember.partner))
+            )
+        ])
         return token
 
 
-token_dao = TokenDao(AuthToken, load_options=[selectinload(AuthToken.user)])
+token_dao = TokenDao(AuthToken, load_options=[joinedload(AuthToken.user).options(
+    joinedload(User.memberships).options(joinedload(PartnerMember.partner))
+)])

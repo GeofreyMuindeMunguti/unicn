@@ -6,9 +6,12 @@ from app.core.config import get_app_settings
 from app.core.security import get_password_hash, verify_password
 from app.db.dao import CRUDDao, ChangedObjState
 from app.exceptions.custom import DaoException
+from app.partners.dao import partner_dao, partner_member_dao
+from app.partners.serializer import PartnerMemberCreateSerializer
 from app.users.models import User
-from sqlalchemy.orm import Session
-from app.users.serializer import UserCreateSerializer, UserUpdateSerializer, UserRegistrationSerializer
+from sqlalchemy.orm import Session, selectinload
+from app.users.serializer import UserCreateSerializer, UserUpdateSerializer, UserRegistrationSerializer, \
+    UserInviteSerializer
 from app.utils.email import send_email
 
 
@@ -49,8 +52,7 @@ class UserDao(CRUDDao[User, UserCreateSerializer, UserUpdateSerializer]):
         hashed_password = get_password_hash(obj_in.password)
         obj_in = UserUpdateSerializer(hashed_password=hashed_password)
 
-        user = self.update(db, db_obj=user, obj_in=obj_in.dict(exclude_unset=True))
-        return user
+        return self.update(db, db_obj=user, obj_in=obj_in.dict(exclude_unset=True))
 
     def get_password_reset_code(self, db: Session, obj_in: GetPasswordResetCodeSerializer) -> User:
         user = self.get(
@@ -98,5 +100,25 @@ class UserDao(CRUDDao[User, UserCreateSerializer, UserUpdateSerializer]):
             db_obj.reset_code = None
             db.commit()
 
+    def invite_user(self, db: Session, obj_in: UserInviteSerializer) -> User:
+        partner = partner_dao.get_not_none(db, id=obj_in.partner_id)
+        user_obj_in = UserCreateSerializer(
+            email=obj_in.email
+        )
+        user = self.create(db, obj_in=user_obj_in)
+        partner_member_dao.create(db, obj_in=PartnerMemberCreateSerializer(user_id=user.id, partner_id=partner.id))
+        db.refresh(user)
 
-user_dao = UserDao(User)
+        if user:
+            settings = get_app_settings()
+            send_email(
+                email_to=obj_in.email,
+                subject_template="INVITE EMAIL",
+                html_template=f"You have been invited to {partner.name} to join click here <a href='{settings.REGISTER_URL}?user_id={user.id}&partner_name={partner.name}'></a>"
+            )
+        return user
+
+
+user_dao = UserDao(User, load_options=[
+    selectinload(User.memberships)
+])

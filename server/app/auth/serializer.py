@@ -4,7 +4,8 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from app.users.serializer import UserSerializer
+from app.db.serializer import InDBBaseSerializer
+from app.users.serializer import UserSerializer, UserLoginSerializer
 
 
 class TokenGrantType(Enum):
@@ -34,7 +35,7 @@ class TokenReadSerializer(BaseModel):
     token_type: str
 
 
-class TokenInDBInDBBaseSerializer(TokenBaseSerializer):
+class TokenInDBInDBBaseSerializer(InDBBaseSerializer):
     id: str
     expires_at: datetime
     expires_in: int
@@ -55,12 +56,9 @@ class LoginSerializer(BaseModel):
     password: str
 
 
-class LoginResponseSerializer(TokenInDBInDBBaseSerializer):
-    user: UserSerializer
-
-
-class PasswordResetResponseSerializer(UserSerializer):
-    pass
+class LoginResponseSerializer(InDBBaseSerializer):
+    access_token: str
+    user: UserLoginSerializer
 
 
 class PasswordResetSerializer(BaseModel):
@@ -73,5 +71,5 @@ class GetPasswordResetCodeSerializer(BaseModel):
     email: str
 
 
-class ResetCodeSerializer(BaseModel):
+class ResetCodeSerializer(InDBBaseSerializer):
     reset_code: str
