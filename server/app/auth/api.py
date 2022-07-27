@@ -3,16 +3,16 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.auth.dao import token_dao
-from app.auth.serializer import LoginSerializer, LoginResponseSerializer, PasswordResetSerializer, \
-    PasswordResetResponseSerializer, GetPasswordResetCodeSerializer, ResetCodeSerializer
+from app.auth.serializer import LoginSerializer, LoginResponseSerializer, PasswordResetSerializer, GetPasswordResetCodeSerializer, ResetCodeSerializer
 from app.core import deps
 from app.exceptions.custom import HttpErrorException, DaoException
 from app.users.dao import user_dao
+from app.users.serializer import UserSerializer
 
-router = APIRouter()
+router = APIRouter(prefix="/auth")
 
 
-@router.post("/login")
+@router.post("/login/", response_model=LoginResponseSerializer)
 def login(
     db: Session = Depends(deps.get_db),
     *,
@@ -28,12 +28,12 @@ def login(
         )
 
 
-@router.post("/password_reset")
+@router.post("/password-reset/", response_model=UserSerializer)
 def reset_password(
     db: Session = Depends(deps.get_db),
     *,
     obj_in: PasswordResetSerializer,
-) -> PasswordResetResponseSerializer:
+) -> UserSerializer:
     try:
         return user_dao.password_reset(db, obj_in=obj_in)
     except DaoException as e:
@@ -44,7 +44,7 @@ def reset_password(
         )
 
 
-@router.post("/reset_code")
+@router.post("/reset-code/", response_model=ResetCodeSerializer)
 def get_reset_code(
     db: Session = Depends(deps.get_db),
     *,
