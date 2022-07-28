@@ -11,6 +11,7 @@ const GlobalStyles = createGlobalStyle`
      --text-color: #263238;
      --text-color-light: #ffffff;
      --error-color: #c72e2e;
+     --color-green: #04C500;
      --color-gray: #838383;
      --color-dark-gray: #d9d9d9;
      --input-border: #e1e4e8;

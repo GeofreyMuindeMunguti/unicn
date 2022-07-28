@@ -42,9 +42,7 @@ const RegisterPage: NextPage = () => {
             <span>Company Name</span> is inviting you to the UNICN platform.
           </p>
         </WelcomeText>
-        <FormCaption>
-          Please fill in the form below to register.
-        </FormCaption>
+        <FormCaption>Please fill in the form below to register.</FormCaption>
         <Form.Container>
           <Form.Grid>
             <Form.Field>
