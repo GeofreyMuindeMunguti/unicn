@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import DotPulse from 'src/components/Loaders/DotPulse';
 
@@ -8,6 +8,7 @@ type StyleProps = {
   disabled?: boolean;
   color?: string;
   type?: 'submit' | 'button';
+  size?: 'small' | 'medium';
 };
 
 type ButtonProps = {
@@ -43,10 +44,35 @@ const StyledButton = styled.button<StyleProps>`
   &:hover {
     opacity: 0.8;
   }
+
+  ${({ size }) => {
+    switch (size) {
+      case 'small':
+        return css`
+          border-radius: 0.3rem;
+          min-width: 10rem;
+          padding: 0.8rem 1rem;
+          font-size: 1.3rem;
+        `;
+      default:
+        return css`
+          min-height: 4rem;
+        `;
+    }
+  }}
+
+  ${({ color }) => {
+    if (color === 'transparent') {
+      return css`
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
+      `;
+    }
+  }}
 `;
 
 const Button: React.FC<Props> = (props) => {
-  const { disabled = false, loading = false, type = 'submit' } = props;
+  const { disabled = false, loading = false, size, type = 'submit' } = props;
   const buttonDisabled = disabled || loading;
 
   // handle click
@@ -59,6 +85,7 @@ const Button: React.FC<Props> = (props) => {
       color={props.color}
       disabled={buttonDisabled}
       onClick={handleClick}
+      size={size}
       type={type}
     >
       {loading ? <DotPulse /> : <span>{props.children}</span>}
