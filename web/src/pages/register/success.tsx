@@ -30,7 +30,7 @@ const Subtitle = styled.h2`
 
 const DownloadCards = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 28rem);
   column-gap: 2rem;
   margin: 3rem 0;
 `;
@@ -59,7 +59,7 @@ const DownloadIcon = styled.div`
 `;
 
 const RedirectButton = styled.div`
-  width: 20rem;
+  width: 28rem;
 `;
 
 const SuccessfulRegistration: NextPage = () => {
