@@ -67,7 +67,7 @@ const FormField = styled.div<FormFieldProps>`
 `;
 
 const Button = styled.div`
-  max-width: 20rem;
+  max-width: 18rem;
   margin-top: 4rem;
 `;
 
