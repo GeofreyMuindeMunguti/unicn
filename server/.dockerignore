@@ -1,0 +1,5 @@
+.git
+dev-scripts/
+.env.local
+.gitignore
+Dockerfile

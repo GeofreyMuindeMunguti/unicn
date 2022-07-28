@@ -6,3 +6,4 @@ dev-scripts/
 ../web/
 .env.local
 .mypy_cache/
+.env.dev
