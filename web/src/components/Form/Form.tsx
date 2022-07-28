@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 type FormFieldError = {
   message: string;
@@ -67,7 +67,7 @@ const FormField = styled.div<FormFieldProps>`
 `;
 
 const Button = styled.div`
-  max-width: 20rem;
+  max-width: 18rem;
   margin-top: 4rem;
 `;
 

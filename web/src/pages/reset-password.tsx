@@ -15,7 +15,7 @@ const ResetPasswordPage: NextPage = () => {
         </Form.Field>
         <Form.Field>
           <label htmlFor="confirm-password">Confirm Password</label>
-          <input type="confirm-password" placeholder="Confirm new password" />
+          <input type="password" placeholder="Confirm new password" />
         </Form.Field>
         <Form.Field>
           <label htmlFor="code">Reset Code</label>
