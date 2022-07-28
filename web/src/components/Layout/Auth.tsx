@@ -25,12 +25,19 @@ const BackgroundImage = styled.div`
 const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  padding: 3rem 0;
+  padding: 3rem 15%;
+
+  @media (max-width: 93.75em) {
+    padding: 3rem 10%;
+  }
 
   & > * {
     width: 50rem;
+
+    @media (max-width: 81.25em) {
+      width: 40rem;
+    }
   }
 `;
 
@@ -41,12 +48,14 @@ const AppHeader = styled.div`
 
   h3 {
     color: var(--primary-color);
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 700;
+    margin-bottom: 0.5rem;
   }
 
   p {
     font-weight: 500;
+    font-size: 1.5rem;
   }
 `;
 

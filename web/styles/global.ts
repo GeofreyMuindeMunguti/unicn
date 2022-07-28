@@ -6,11 +6,12 @@ import { createGlobalStyle } from 'styled-components';
 const GlobalStyles = createGlobalStyle`
     /* css variables */
     :root {
-     --primary-color: #093ef9;
+     --primary-color: #093EF9;
      --primary-background-color: #ffffff;
      --text-color: #263238;
      --text-color-light: #ffffff;
      --error-color: #c72e2e;
+     --color-gray: #838383;
      --color-dark-gray: #d9d9d9;
      --input-border: #e1e4e8;
      --input-background-color: #f3f4f6;
