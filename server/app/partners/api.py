@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.core import deps
 from app.db.pagination import Page, PaginationQueryParams
+from app.exceptions.custom import HttpErrorException, DaoException
 from app.partners.dao import partner_dao
 from app.partners.serializer import PartnerCreateSerializer, PartnerSerializer
 
@@ -15,7 +16,14 @@ def create_partner(
         *,
         obj_in: PartnerCreateSerializer,
 ) -> PartnerSerializer:
-    return partner_dao.create(db, obj_in=obj_in)
+    try:
+        return partner_dao.create(db, obj_in=obj_in)
+    except DaoException as e:
+        raise HttpErrorException(
+            status_code=403,
+            error_code="FAILED CREATING PARTNER",
+            error_message=f"{e.message}"
+        )
 
 
 @router.get("/", response_model=Page[PartnerSerializer])

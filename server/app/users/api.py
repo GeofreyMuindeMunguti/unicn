@@ -8,7 +8,8 @@ from app.exceptions.custom import HttpErrorException
 from app.partners.dao import partner_member_dao
 from app.users.dao import user_dao
 from app.users.models import User
-from app.users.serializer import UserSerializer, UserInviteSerializer, InvitedUserSerializer
+from app.users.serializer import UserSerializer, UserInviteSerializer, InvitedUserSerializer, UserUpdateSerializer, \
+    UserRegisterSerializer
 
 router = APIRouter(prefix="/user")
 

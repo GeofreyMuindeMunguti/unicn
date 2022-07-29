@@ -17,15 +17,22 @@ from app.utils.email import send_email
 
 class UserDao(CRUDDao[User, UserCreateSerializer, UserUpdateSerializer]):
     def register(self, db: Session, obj_in: UserRegistrationSerializer) -> User:
-        if obj_in.password:
-            hashed_password = get_password_hash(obj_in.password)
 
-            obj_in = UserCreateSerializer(hashed_password=hashed_password, **obj_in.dict(exclude_unset=True))
+        if user := self.get(db, id=obj_in.user_id):
+            hashed_password = get_password_hash(obj_in.password)
+            obj_in = UserUpdateSerializer(hashed_password=hashed_password, **obj_in.dict(exclude_unset=True))
+            return self.update(db, obj_in=obj_in, db_obj=user)
 
         else:
-            obj_in = UserCreateSerializer(**obj_in.dict(exclude_unset=True))
+            if obj_in.password:
+                hashed_password = get_password_hash(obj_in.password)
 
-        return self.create(db, obj_in=obj_in)
+                obj_in = UserCreateSerializer(hashed_password=hashed_password, **obj_in.dict(exclude_unset=True))
+
+            else:
+                obj_in = UserCreateSerializer(**obj_in.dict(exclude_unset=True))
+
+            return self.create(db, obj_in=obj_in)
 
     def authenticate(
         self, db: Session, *, email: str, password: str
@@ -67,7 +74,7 @@ class UserDao(CRUDDao[User, UserCreateSerializer, UserUpdateSerializer]):
         send_email(
             email_to=user.email,
             subject_template="Password reset",
-            html_template=f"Here is your password reset code: {user.reset_code}"
+            html_template=f"Here is your password reset code: {reset_code}"
         )
         user.reset_code = reset_code
 
@@ -84,8 +91,7 @@ class UserDao(CRUDDao[User, UserCreateSerializer, UserUpdateSerializer]):
             send_email(
                 email_to=user.email,
                 subject_template="Invite Email",
-                html_template=f"You have been invited to UNICON, click "
-                              f"<a href='{settings.REGISTER_URL}?id={user_id}'>Here</a>"
+                html_template=f"Hey there, </br> You have been invited to UNICON platform, click <a href='{settings.REGISTER_URL}/?id={user_id}&email={user.email}'>Here</a> to register!"
             )
         except Exception:
             raise DaoException(
