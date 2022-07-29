@@ -188,6 +188,7 @@ class CreateDao(Generic[ModelType, CreateSerializer]):
             db.commit()
 
             db_obj = self.get_not_none(db, id=obj_id)
+            self.on_post_create(db, db_obj=db_obj)
             return db_obj
 
         except IntegrityError:
