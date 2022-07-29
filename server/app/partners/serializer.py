@@ -13,11 +13,19 @@ class PartnerMembershipSerializer(InDBBaseSerializer):
     partner_id: str
 
 
+class PartnerOwnerSerializer(BaseModel):
+    email: str
+    phone: Optional[str]
+    name: str
+
+
 class PartnerCreateSerializer(BaseModel):
     name: str
     address: str
     website_url: str
     logo_url: str
+    owner_id: Optional[str]
+    owner: PartnerOwnerSerializer
 
 
 class PartnerUpdateSerializer(BaseModel):

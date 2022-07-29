@@ -7,7 +7,7 @@ from app.auth.serializer import LoginSerializer, LoginResponseSerializer, Passwo
 from app.core import deps
 from app.exceptions.custom import HttpErrorException, DaoException
 from app.users.dao import user_dao
-from app.users.serializer import UserSerializer
+from app.users.serializer import UserSerializer, UserRegisterSerializer, UserRegistrationSerializer
 
 router = APIRouter(prefix="/auth")
 
@@ -58,3 +58,12 @@ def get_reset_code(
             error_code="GET RESET CODE FAILED",
             error_message=e.message,
         )
+
+
+@router.post("/register", response_model=UserSerializer)
+def update_user_details(
+    db: Session = Depends(deps.get_db),
+    *,
+    obj_in: UserRegistrationSerializer,
+) -> UserSerializer:
+    return user_dao.register(db, obj_in=obj_in)

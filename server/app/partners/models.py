@@ -12,10 +12,14 @@ class Partner(Base, ActiveBaseAbstract):
     address = Column(String(100), nullable=True)
     website_url = Column(String(100), nullable=True, unique=True)
     logo_url = Column(String(100), nullable=True)
+    owner_id = Column(String, ForeignKey("users.id"), nullable=True)
 
     members: "PartnerMember" = relationship(
         "PartnerMember",
         back_populates="partner"
+    )
+    owner: "User" = relationship(
+        "User"
     )
 
     @property
