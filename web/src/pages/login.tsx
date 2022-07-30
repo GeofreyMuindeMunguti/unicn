@@ -17,7 +17,7 @@ const LoginPage: NextPage = () => {
           <label htmlFor="password">Password</label>
           <input type="password" placeholder="Enter your password" />
         </Form.Field>
-        <Link href="/reset-password">
+        <Link href="/forgot-password">
           <a>Forgot Password?</a>
         </Link>
         <Form.Button>
