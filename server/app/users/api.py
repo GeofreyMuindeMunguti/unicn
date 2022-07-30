@@ -28,11 +28,12 @@ def invite_user(
     *,
     obj_in: UserInviteSerializer,
 ) -> InvitedUserSerializer:
-    user = user_dao.get_not_none(db, email=obj_in.email)
-    if user and partner_member_dao.get_not_none(db, partner_id=obj_in.partner_id, user_id=user.id):
-        raise HttpErrorException(
-            status_code=HTTPStatus.BAD_REQUEST,
-            error_code="USER INVITE FAILED",
-            error_message="User exists!"
-        )
+    user = user_dao.get(db, email=obj_in.email)
+    if user:
+        if partner_member_dao.get_not_none(db, partner_id=obj_in.partner_id, user_id=user.id):
+            raise HttpErrorException(
+                status_code=HTTPStatus.BAD_REQUEST,
+                error_code="USER INVITE FAILED",
+                error_message="User exists!"
+            )
     return user_dao.invite_user(db, obj_in=obj_in)
