@@ -1,12 +1,16 @@
 FROM python:3.9
 
 # Install poetry
-RUN pip install "poetry==1.1.13" && poetry config virtualenvs.create false
+RUN pip install "poetry==1.1.14" && poetry config virtualenvs.create false
+
+RUN pip install pyopenssl
+
+RUN pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org pip setuptools
 
 # Copy poetry.lock* in case it doesn't exist in the repo
 COPY pyproject.toml poetry.lock* /app/
 
-COPY .env.dev .env.local
+COPY .env.dev /app/.env.local
 
 WORKDIR /app/
 
