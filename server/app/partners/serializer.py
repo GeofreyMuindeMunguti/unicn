@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from pydantic.main import BaseModel
 
@@ -12,6 +12,7 @@ class PartnerSerializer(BaseModel):
 class PartnerMembershipSerializer(InDBBaseSerializer):
     partner_id: str
     partner_name: str
+    menu_items: Optional[List[str]]
 
 
 class PartnerOwnerSerializer(BaseModel):

@@ -30,7 +30,7 @@ class PartnerDao(
             user_obj = UserCreateSerializer(**owner)
             if not user_dao.get(db, email=owner["email"]):
                 user = user_dao.create(db, obj_in=user_obj)
-                user_dao.send_invitation(db, user_id=user.id)
+                user_dao.send_invitation(db, user_id=user.id, partner_name=orig_values.get(("name", "TACTIVE CONSULTING")))
 
                 values["owner_id"] = user.id
 

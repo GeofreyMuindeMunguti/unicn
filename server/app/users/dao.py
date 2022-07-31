@@ -7,9 +7,10 @@ from app.core.security import get_password_hash, verify_password
 from app.db.dao import CRUDDao, ChangedObjState
 from app.exceptions.custom import DaoException
 from app.partners.dao import partner_dao, partner_member_dao
+from app.partners.models import PartnerMember
 from app.partners.serializer import PartnerMemberCreateSerializer
 from app.users.models import User
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm import Session, selectinload, joinedload
 from app.users.serializer import UserCreateSerializer, UserUpdateSerializer, UserRegistrationSerializer, \
     UserInviteSerializer
 from app.utils.email import send_email
@@ -83,7 +84,7 @@ class UserDao(CRUDDao[User, UserCreateSerializer, UserUpdateSerializer]):
 
         return user
 
-    def send_invitation(self, db: Session, user_id: str) -> None:
+    def send_invitation(self, db: Session, user_id: str, partner_name: str) -> None:
         user = self.get_not_none(db, id=user_id)
         settings = get_app_settings()
 
@@ -91,7 +92,7 @@ class UserDao(CRUDDao[User, UserCreateSerializer, UserUpdateSerializer]):
             send_email(
                 email_to=user.email,
                 subject_template="Invite Email",
-                html_template=f"Hey there, </br> You have been invited to UNICON platform, click <a href='{settings.REGISTER_URL}/?id={user_id}&email={user.email}'>Here</a> to register!"
+                html_template=f"Hey there, </br> You have been invited to UNICON platform, click <a href='{settings.REGISTER_URL}/?id={user_id}&email={user.email}&partner={partner_name}'>Here</a> to register!"
             )
         except Exception:
             raise DaoException(
@@ -126,5 +127,5 @@ class UserDao(CRUDDao[User, UserCreateSerializer, UserUpdateSerializer]):
 
 
 user_dao = UserDao(User, load_options=[
-    selectinload(User.memberships)
+    selectinload(User.memberships).options(joinedload(PartnerMember.partner))
 ])

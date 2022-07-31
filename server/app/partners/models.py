@@ -1,3 +1,4 @@
+from app.auth.constants import MENU_ITEMS
 from app.db.base_class import Base, ActiveBaseAbstract
 from sqlalchemy import Column, String, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
@@ -57,3 +58,6 @@ class PartnerMember(Base, ActiveBaseAbstract):
     def partner_name(self) -> str:
         return self.partner.name
 
+    @property
+    def menu_items(self) -> list:
+        return MENU_ITEMS.get(self.role, ["PROFILE"])

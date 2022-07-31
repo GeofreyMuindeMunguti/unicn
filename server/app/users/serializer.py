@@ -27,10 +27,15 @@ class UserRegisterSerializer(BaseModel):
     user_id: Optional[str]
 
 
+class UserMembershipsSerializer(InDBBaseSerializer):
+    partner_name: str
+
+
 class UserSerializer(InDBBaseSerializer):
     name: Optional[str]
     phone: Optional[str]
     email: str
+    memberships: Optional[List[PartnerMembershipSerializer]]
 
 
 class UserRegistrationSerializer(BaseModel):
@@ -54,3 +59,8 @@ class UserInviteSerializer(BaseModel):
 
 class InvitedUserSerializer(InDBBaseSerializer):
     email: str
+
+
+class UserProfileUpdateSerializer(BaseModel):
+    name: Optional[str]
+    phone: Optional[str]

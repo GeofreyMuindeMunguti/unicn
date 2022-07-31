@@ -26,7 +26,7 @@ def upgrade() -> None:
     now = datetime.datetime.now()
     op.execute(f"INSERT INTO users(id, name, email, created_at) VALUES ('{settings.DEFAULT_USER_ID}','SUPER-ADMIN', '{settings.DEFAULT_USER_EMAIL}', '{now}')")
     op.execute(f"INSERT INTO partners(id, name, owner_id, created_at) VALUES ('{settings.DEFAULT_ADMIN_ID}', 'TACTIVE CONSULTING', '{settings.DEFAULT_USER_ID}', '{now}')")
-    op.execute(f"INSERT INTO partnermembers(id, user_id, partner_id, role, created_at) VALUES ('{str(uuid.uuid4())}','{settings.DEFAULT_USER_ID}', '{settings.DEFAULT_ADMIN_ID}', 'ADMIN','{now}')")
+    op.execute(f"INSERT INTO partnermembers(id, user_id, partner_id, role, created_at) VALUES ('{str(uuid.uuid4())}','{settings.DEFAULT_USER_ID}', '{settings.DEFAULT_ADMIN_ID}', 'SUPER_ADMIN','{now}')")
 
 
 def downgrade() -> None:

@@ -9,7 +9,7 @@ from app.partners.dao import partner_member_dao
 from app.users.dao import user_dao
 from app.users.models import User
 from app.users.serializer import UserSerializer, UserInviteSerializer, InvitedUserSerializer, UserUpdateSerializer, \
-    UserRegisterSerializer
+    UserRegisterSerializer, UserProfileUpdateSerializer
 
 router = APIRouter(prefix="/user")
 
@@ -19,6 +19,17 @@ def user_profile(
     user: User = Depends(deps.get_current_user)
 ) -> UserSerializer:
     return user
+
+@router.patch(
+    "/me/", response_model=UserSerializer
+)
+def update_profile(
+        db: Session = Depends(deps.get_db),
+        user: User = Depends(deps.get_current_user),
+        *,
+        obj_in: UserProfileUpdateSerializer,
+) -> UserSerializer:
+    return user_dao.update(db, db_obj=user, obj_in=obj_in)
 
 
 @router.post("/invite/", response_model=InvitedUserSerializer)
