@@ -84,5 +84,9 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     JWT_ALGORITHM: str = "HS256"
 
+    DEFAULT_ADMIN_ID: str = "changethis"
+    DEFAULT_USER_ID: str = "changethis"
+    DEFAULT_USER_EMAIL: str = "changethis"
+
     class Config:
         case_sensitive = True

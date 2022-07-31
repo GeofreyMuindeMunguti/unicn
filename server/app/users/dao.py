@@ -18,7 +18,7 @@ from app.utils.email import send_email
 class UserDao(CRUDDao[User, UserCreateSerializer, UserUpdateSerializer]):
     def register(self, db: Session, obj_in: UserRegistrationSerializer) -> User:
 
-        if user := self.get(db, id=obj_in.user_id):
+        if user := self.get_not_none(db, id=obj_in.user_id):
             hashed_password = get_password_hash(obj_in.password)
             obj_in = UserUpdateSerializer(hashed_password=hashed_password, **obj_in.dict(exclude_unset=True))
             return self.update(db, obj_in=obj_in, db_obj=user)
