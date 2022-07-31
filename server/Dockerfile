@@ -10,7 +10,7 @@ RUN pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org pi
 # Copy poetry.lock* in case it doesn't exist in the repo
 COPY pyproject.toml poetry.lock* /app/
 
-COPY .env.dev /app/.env.local
+COPY .env.local /app/.env.local
 
 WORKDIR /app/
 
