@@ -60,7 +60,7 @@ def get_reset_code(
         )
 
 
-@router.post("/register", response_model=UserSerializer)
+@router.post("/register/", response_model=UserSerializer)
 def update_user_details(
     db: Session = Depends(deps.get_db),
     *,
