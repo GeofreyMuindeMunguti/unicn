@@ -1,10 +1,10 @@
-from app.db.base_class import Base
+from app.db.base_class import Base, ActiveBaseAbstract
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from app.partners.models import PartnerMember
 
 
-class User(Base):
+class User(Base, ActiveBaseAbstract):
     __tablename__ = "users"
 
     name = Column(String(100), nullable=True)

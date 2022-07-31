@@ -81,6 +81,10 @@ class InDBBaseSerializer(BaseModel):
         getter_dict = LazyAwareGetterDict
 
 
+class ActiveInDBSerializer(BaseModel):
+    is_active: Optional[bool]
+
+
 class TrimmableInDBBaseSerializer(TrimmableBaseModel):
     id: str
     created_at: datetime = Field(default_factory=datetime.now)

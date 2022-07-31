@@ -35,6 +35,7 @@ class UserSerializer(InDBBaseSerializer):
     name: Optional[str]
     phone: Optional[str]
     email: str
+    department_name: str = "Main - Office"
     memberships: Optional[List[PartnerMembershipSerializer]]
 
 

@@ -2,11 +2,7 @@ from typing import Optional, List
 
 from pydantic.main import BaseModel
 
-from app.db.serializer import InDBBaseSerializer
-
-
-class PartnerSerializer(BaseModel):
-    name: str
+from app.db.serializer import InDBBaseSerializer, ActiveInDBSerializer
 
 
 class PartnerMembershipSerializer(InDBBaseSerializer):
@@ -16,6 +12,12 @@ class PartnerMembershipSerializer(InDBBaseSerializer):
 
 
 class PartnerOwnerSerializer(BaseModel):
+    email: str
+    phone: Optional[str]
+    name: str
+
+
+class PartnerOwnerInDBSerializer(InDBBaseSerializer):
     email: str
     phone: Optional[str]
     name: str
@@ -37,11 +39,13 @@ class PartnerUpdateSerializer(BaseModel):
     logo_url: Optional[str]
 
 
-class PartnerSerializer(InDBBaseSerializer):
+class PartnerSerializer(InDBBaseSerializer, ActiveInDBSerializer):
     name: str
     address: Optional[str]
     website_url: Optional[str]
     logo_url: Optional[str]
+    member_count: int
+    owner: Optional[PartnerOwnerInDBSerializer]
 
 
 class PartnerMemberCreateSerializer(BaseModel):

@@ -1,8 +1,8 @@
-from app.db.dao import CRUDDao
-from app.exceptions.custom import DaoException
+from app.db.dao import CRUDDao, ChangedObjState
+from app.exceptions.custom import DaoException, InvalidStateException
 from app.partners.constants import PartnerMemberRoles
 from app.partners.models import Partner, PartnerMember
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload, selectinload
 from app.partners.serializer import PartnerCreateSerializer, PartnerUpdateSerializer, PartnerMemberCreateSerializer, \
     PartnerMemberUpdateSerializer
 from app.users.serializer import UserCreateSerializer
@@ -41,8 +41,28 @@ class PartnerDao(
             db, obj_in=PartnerMemberCreateSerializer(partner_id=db_obj.id, user_id=db_obj.owner_id, role=PartnerMemberRoles.PARTNER_ADMIN.value)
         )
 
+    def deactivate(self, db: Session, obj_id: str) -> Partner:
+        try:
+            partner = self.get_not_none(db, id=obj_id)
+            return self.update(db, obj_in={"is_active": False}, db_obj=partner)
+        except InvalidStateException:
+            raise DaoException(
+                resource="PARTNER",
+                message="Partner not found!"
+            )
 
-partner_dao = PartnerDao(Partner, load_options=[joinedload(Partner.owner)])
+    def activate(self, db: Session, obj_id: str) -> Partner:
+        try:
+            partner = self.get_not_none(db, id=obj_id)
+            return self.update(db, obj_in={"is_active": True}, db_obj=partner)
+        except InvalidStateException:
+            raise DaoException(
+                resource="PARTNER",
+                message="Partner not found!"
+            )
+
+
+partner_dao = PartnerDao(Partner, load_options=[joinedload(Partner.owner), selectinload(Partner.members)])
 
 
 class PartnerMemberDao(

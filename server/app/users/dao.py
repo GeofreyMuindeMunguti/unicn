@@ -39,7 +39,7 @@ class UserDao(CRUDDao[User, UserCreateSerializer, UserUpdateSerializer]):
         self, db: Session, *, email: str, password: str
     ) -> Optional[User]:
         user = self.get(
-            db, email=email
+            db, email=email, is_active=True
         )
         if not user:
             return None

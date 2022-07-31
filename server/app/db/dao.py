@@ -606,3 +606,13 @@ class CRUDDao(
             load_options=load_options,
             state_transition_graph=state_transition_graph,
         )
+
+    def get_and_update(self, db: Session, obj_id: str, obj_in: UpdateSerializer) -> ModelType:
+        try:
+            obj = self.get_not_none(db, id=obj_id)
+            return self.update(db, obj_in=obj_in, db_obj=obj)
+        except InvalidStateException:
+            raise DaoException(
+                resource=self.model.__name__,
+                message=f"Object with id {obj_id} not found!"
+            )

@@ -8,7 +8,7 @@ from app.core.config import get_app_settings
 from app.db.dao import LoadOption
 from app.db.session import get_session, get_engine
 from sqlalchemy.engine import Engine
-from fastapi import Depends, Request
+from fastapi import Depends, Request, Header
 
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
@@ -16,8 +16,8 @@ from jose import jwt
 from sqlalchemy.orm import Session, load_only
 
 from app.exceptions.custom import HttpErrorException, DaoException, InvalidStateException
-from app.partners.dao import partner_member_dao
-from app.partners.models import PartnerMember
+from app.partners.dao import partner_member_dao, partner_dao
+from app.partners.models import PartnerMember, Partner
 from app.users.dao import user_dao
 from app.users.models import User
 
@@ -121,6 +121,19 @@ def get_current_user(
         )
 
     return user
+
+
+def get_current_partner(
+        db: Session = Depends(get_db), partner_id: str = Header(...),
+) -> Partner:
+    try:
+        return partner_dao.get_not_none(db, id=partner_id)
+    except InvalidStateException:
+        raise HttpErrorException(
+            status_code=HTTPStatus.UNAUTHORIZED,
+            error_code="PARTNER DETAILS",
+            error_message="Invalid partner details"
+        )
 
 
 def get_super_admin_member(
