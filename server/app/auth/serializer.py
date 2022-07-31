@@ -72,4 +72,4 @@ class GetPasswordResetCodeSerializer(BaseModel):
 
 
 class ResetCodeSerializer(InDBBaseSerializer):
-    reset_code: str
+    email: str

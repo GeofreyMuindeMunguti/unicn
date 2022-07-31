@@ -15,7 +15,9 @@ from jose import jwt
 
 from sqlalchemy.orm import Session, load_only
 
-from app.exceptions.custom import HttpErrorException
+from app.exceptions.custom import HttpErrorException, DaoException, InvalidStateException
+from app.partners.dao import partner_member_dao
+from app.partners.models import PartnerMember
 from app.users.dao import user_dao
 from app.users.models import User
 
@@ -36,9 +38,9 @@ def get_current_active_user_id() -> str:
 
 
 def get_decoded_token(
-    request: Request,
-    db: Session = Depends(get_db),
-    token: str = Depends(reusable_oauth2),
+        request: Request,
+        db: Session = Depends(get_db),
+        token: str = Depends(reusable_oauth2),
 ) -> dict:
     if not token:
         print("No token provided")
@@ -51,7 +53,7 @@ def get_decoded_token(
         # Temporary disable token expiry check on production environment.
         # TODO: Use redis for this.
         if request.url.path.endswith("validate/") or request.url.path.endswith(
-            "refresh-token/"
+                "refresh-token/"
         ):
             if not token_dao.is_refresh_token_valid(db, token=token):
                 raise ValueError("Token not found.")
@@ -84,9 +86,9 @@ class CurrentUser:
         self.load_options = load_options
 
     def __call__(
-        self,
-        db: Session = Depends(get_db),
-        token_payload: dict = Depends(get_decoded_token),
+            self,
+            db: Session = Depends(get_db),
+            token_payload: dict = Depends(get_decoded_token),
     ) -> User:
         load_options: Sequence[LoadOption] = [
             load_only(User.id, User.phone, User.email)
@@ -105,7 +107,7 @@ class CurrentUser:
 
 
 def get_current_user(
-    db: Session = Depends(get_db), token_payload: dict = Depends(get_decoded_token)
+        db: Session = Depends(get_db), token_payload: dict = Depends(get_decoded_token)
 ) -> User:
     user = user_dao.get(
         db,
@@ -119,3 +121,20 @@ def get_current_user(
         )
 
     return user
+
+
+def get_super_admin_member(
+        db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+) -> PartnerMember:
+    try:
+        return partner_member_dao.get_not_none(
+            db,
+            user_id=current_user.id,
+            partner_id=settings.DEFAULT_ADMIN_ID,
+        )
+    except InvalidStateException:
+        raise HttpErrorException(
+            status_code=HTTPStatus.UNAUTHORIZED,
+            error_code="UNAUTHORIZED ACCESS",
+            error_message="Resource Access Restricted",
+        )

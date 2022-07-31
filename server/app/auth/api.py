@@ -12,7 +12,7 @@ from app.users.serializer import UserSerializer, UserRegisterSerializer, UserReg
 router = APIRouter(prefix="/auth")
 
 
-@router.post("/login", response_model=LoginResponseSerializer)
+@router.post("/login/", response_model=LoginResponseSerializer)
 def login(
     db: Session = Depends(deps.get_db),
     *,
