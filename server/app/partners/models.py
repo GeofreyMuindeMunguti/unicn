@@ -52,3 +52,8 @@ class PartnerMember(Base, ActiveBaseAbstract):
             name="uq_partner_user"
         ),
     )
+
+    @property
+    def partner_name(self) -> str:
+        return self.partner.name
+

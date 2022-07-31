@@ -11,6 +11,7 @@ class PartnerSerializer(BaseModel):
 
 class PartnerMembershipSerializer(InDBBaseSerializer):
     partner_id: str
+    partner_name: str
 
 
 class PartnerOwnerSerializer(BaseModel):
@@ -37,9 +38,9 @@ class PartnerUpdateSerializer(BaseModel):
 
 class PartnerSerializer(InDBBaseSerializer):
     name: str
-    address: str
-    website_url: str
-    logo_url: str
+    address: Optional[str]
+    website_url: Optional[str]
+    logo_url: Optional[str]
 
 
 class PartnerMemberCreateSerializer(BaseModel):
