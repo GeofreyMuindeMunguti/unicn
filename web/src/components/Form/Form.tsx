@@ -1,8 +1,5 @@
 import styled from 'styled-components';
-
-type FormFieldError = {
-  message: string;
-};
+import { FieldError as FormFieldError } from 'react-hook-form';
 
 type FormFieldProps = {
   children: React.ReactNode;

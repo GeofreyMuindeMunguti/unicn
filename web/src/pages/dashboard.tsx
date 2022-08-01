@@ -8,7 +8,7 @@ const AlignCenter = styled.div`
   justify-content: center;
 `;
 
-const Home: NextPage = () => {
+const HomePage: NextPage = () => {
   return (
     <AlignCenter>
       <h2>Here we go</h2>
@@ -16,4 +16,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default HomePage;
