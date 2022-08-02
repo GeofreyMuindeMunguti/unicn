@@ -51,7 +51,7 @@ export default NextAuth({
     },
     async jwt({ token, user }) {
       if (user) {
-        token.accessToken = user.token;
+        token.accessToken = user.access_token;
         token.user = user;
       }
       return token;
