@@ -80,7 +80,7 @@ const RegisterPage: NextPage = () => {
       password: data.password,
       user_id: '37d16981-722e-45fc-9b9c-93d93f99ca29', // TODO: remove this hardcoded value
     };
-    const [err] = await to(axios.post('auth/register/', payload));
+    const [err] = await to(axios.post('auth/register', payload));
 
     if (err) {
       const errMessage = apiError(err);
