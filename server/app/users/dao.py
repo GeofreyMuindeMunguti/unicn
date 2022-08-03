@@ -5,7 +5,7 @@ from app.auth.serializer import PasswordResetSerializer, GetPasswordResetCodeSer
 from app.core.config import get_app_settings
 from app.core.security import get_password_hash, verify_password
 from app.db.dao import CRUDDao, ChangedObjState
-from app.exceptions.custom import DaoException
+from app.exceptions.custom import DaoException, InvalidStateException
 from app.partners.dao import partner_dao, partner_member_dao
 from app.partners.models import PartnerMember
 from app.partners.serializer import PartnerMemberCreateSerializer
@@ -108,11 +108,28 @@ class UserDao(CRUDDao[User, UserCreateSerializer, UserUpdateSerializer]):
             db.commit()
 
     def invite_user(self, db: Session, obj_in: UserInviteSerializer) -> User:
-        partner = partner_dao.get_not_none(db, id=obj_in.partner_id)
+        try:
+            partner = partner_dao.get_not_none(db, id=obj_in.partner_id)
+        except InvalidStateException:
+            raise DaoException(
+                resource="PARTNER",
+                message="Partner not found!"
+            )
         user_obj_in = UserCreateSerializer(
             email=obj_in.email
         )
-        user = self.create(db, obj_in=user_obj_in)
+        if users := self.get(db, email=user_obj_in.email):
+            user = users[0]
+        else:
+            user = self.create(db, obj_in=user_obj_in)
+
+        partner_member = partner_member_dao.get(db, user_id=user.id, partner_id=partner.id)
+        if partner_member:
+            raise DaoException(
+                resource="PARTNER MEMBER",
+                message="Partner already exists"
+            )
+
         partner_member_dao.create(db, obj_in=PartnerMemberCreateSerializer(user_id=user.id, partner_id=partner.id))
         db.refresh(user)
 

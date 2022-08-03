@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.core import deps
-from app.exceptions.custom import HttpErrorException
+from app.exceptions.custom import HttpErrorException, DaoException
 from app.partners.dao import partner_member_dao
 from app.users.dao import user_dao
 from app.users.models import User
@@ -41,10 +41,18 @@ def invite_user(
 ) -> InvitedUserSerializer:
     user = user_dao.get(db, email=obj_in.email)
     if user:
-        if partner_member_dao.get_not_none(db, partner_id=obj_in.partner_id, user_id=user.id):
+        if partner_member_dao.get(db, partner_id=obj_in.partner_id, user_id=user.id):
             raise HttpErrorException(
                 status_code=HTTPStatus.BAD_REQUEST,
                 error_code="USER INVITE FAILED",
                 error_message="User exists!"
             )
-    return user_dao.invite_user(db, obj_in=obj_in)
+    try:
+        return user_dao.invite_user(db, obj_in=obj_in)
+
+    except DaoException as e:
+        raise HttpErrorException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            error_code="USER INVITE FAILED",
+            error_message=e.message
+        )
