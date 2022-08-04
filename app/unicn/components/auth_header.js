@@ -1,4 +1,6 @@
-import {View, StyleSheet, Text} from 'react-native'
+import {View, StyleSheet} from 'react-native'
+import {Text} from "react-native-paper"
+import { colors } from '../constants';
 
 export default function AuthPageHeader({title, description}) {
     return (
@@ -9,12 +11,12 @@ export default function AuthPageHeader({title, description}) {
             <Text style={{fontSize: 20, fontWeight: 'bold', color: '#093EF9'}}>{title}</Text>
             <Text style={{fontSize: 16, fontWeight: '400', color: '#838383', paddingTop: 10}}>{description}</Text>
             <View
-                style={{
-                    borderBottomColor: '#808080',
-                    borderBottomWidth: 1.5,
-                    paddingTop: 10,
-                    width: '90%'
-                }}
+              style={{
+                borderBottomColor: '#808080',
+                borderBottomWidth: 1.5,
+                paddingTop: 10,
+                width: '90%'
+              }}
             />
         </View>
       </View>
@@ -24,32 +26,27 @@ export default function AuthPageHeader({title, description}) {
 
 const styles = StyleSheet.create({
     background: {
+      flex:3/4,
       width: '100%',
-      height: 250,
-      position: 'relative',
-      top: 0,
-      left: 0,
       backgroundColor: '#093EF9',
     },
     header: {
-      height: 150,
+      flex: 1,
+      justifyContent: "start",
       width: '100%',
       borderTopLeftRadius: 50,
       borderTopRightRadius: 50,
-      position: 'absolute',
-      top: 200,
-      elevation: 10,
-      backgroundColor: '#ffffff',
+      position: 'relative',
+      top: -50,
+      backgroundColor: colors.light,
     },
     header_title: {
-       left: 20,
        top: 40,
+       left: 20,
        width: '100%',
-       position: 'absolute',
+       position: 'relative',
     },
     body: {
-        top: 80,
-        left: 20,
         flex: 1,
         borderWidth: 1,
         width: '90%',
